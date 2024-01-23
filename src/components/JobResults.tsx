@@ -1,10 +1,10 @@
-import { jobFilterValues } from "@/lib/validation";
+import { JobFilterValues } from "@/lib/validation";
 import JobListItem from "./JobListItem";
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 
 interface JobResultsProps {
-  filterValues: jobFilterValues;
+  filterValues: JobFilterValues;
 }
 
 export default async function JobResults({
@@ -46,6 +46,11 @@ export default async function JobResults({
       {jobs.map((job) => (
         <JobListItem job={job} key={job.id} />
       ))}
+      {jobs.length === 0 && (
+        <p className="text-center m-auto">
+          No jobs found. Try adjusting your search filters.
+        </p>
+      )}
     </div>
   );
 }
