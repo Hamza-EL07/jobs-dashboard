@@ -18,6 +18,9 @@ import { jobTypes, locationTypes } from "@/lib/job-type";
 import LocationInput from "@/components/LocationInput";
 import { X } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import RichTextEditor from "@/components/RichTextEditor";
+import { draftToMarkdown } from "markdown-draft-js";
+import LoadingButton from "@/components/LoadingButton";
 
 export default function NewJobForm() {
   const form = useForm<CreateJobValues>({
@@ -100,7 +103,7 @@ export default function NewJobForm() {
                 <FormItem>
                   <FormLabel>Company</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input  placeholder="e.g company name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -134,7 +137,16 @@ export default function NewJobForm() {
                 <FormItem>
                   <FormLabel>Location</FormLabel>
                   <FormControl>
-                    <Select {...field} defaultValue="">
+                    <Select
+                      {...field}
+                      defaultValue=""
+                      onChange={(e) => {
+                        field.onChange(e);
+                        if (e.currentTarget.value === "remote") {
+                          trigger("location");
+                        }
+                      }}
+                    >
                       <option value="" hidden>
                         Select location type
                       </option>
@@ -208,11 +220,15 @@ export default function NewJobForm() {
                   render={({ field }) => (
                     <FormItem className="grow">
                       <FormControl>
-                        <Input placeholder="Website" type="url" {...field} 
-                        onChange={e => {
-                          field.onChange(e)
-                          trigger("applicationEmail");
-                        }}/>
+                        <Input
+                          placeholder="Website"
+                          type="url"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            trigger("applicationEmail");
+                          }}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -220,6 +236,44 @@ export default function NewJobForm() {
                 />
               </div>
             </div>
+            <FormField
+              control={control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <Label onClick={() => setFocus("description")}>
+                    Description
+                  </Label>
+                  <FormControl>
+                    <RichTextEditor
+                      onChange={(draft) =>
+                        field.onChange(draftToMarkdown(draft))
+                      }
+                      ref={field.ref}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name="salary"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Salary <span className="text-muted-foreground">$</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input  placeholder="e.g 300.000" {...field} type="number" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <LoadingButton type="submit" loading={isSubmitting}>
+              Submitting
+            </LoadingButton>
           </form>
         </Form>
       </div>
