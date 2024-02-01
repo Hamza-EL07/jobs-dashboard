@@ -21,6 +21,8 @@ import { Label } from "@/components/ui/label";
 import RichTextEditor from "@/components/RichTextEditor";
 import { draftToMarkdown } from "markdown-draft-js";
 import LoadingButton from "@/components/LoadingButton";
+import { object } from "zod";
+import { CreatJobPosting } from "./Action";
 
 export default function NewJobForm() {
   const form = useForm<CreateJobValues>({
@@ -38,8 +40,22 @@ export default function NewJobForm() {
   } = form;
 
   async function onSubmit(values: CreateJobValues) {
-    alert(JSON.stringify(values, null, 2));
+    // alert(JSON.stringify(values, null, 2)); delet this to add Action.tsx
+    const formData = new FormData();
+
+    Object.entries(values).forEach(([key, value]) => {
+      if (value) {
+        formData.append(key, value);
+      }
+    });
+
+    try {
+      await CreatJobPosting(formData);
+    } catch (error) {
+      alert("An error occurred, please try again later");
+    }
   }
+
   return (
     <main className="m-auto my-10 max-w-3xl space-x-10">
       <div className="space-y-5 text-center">
@@ -103,7 +119,7 @@ export default function NewJobForm() {
                 <FormItem>
                   <FormLabel>Company</FormLabel>
                   <FormControl>
-                    <Input  placeholder="e.g company name" {...field} />
+                    <Input placeholder="e.g company name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -265,7 +281,7 @@ export default function NewJobForm() {
                     Salary <span className="text-muted-foreground">$</span>
                   </FormLabel>
                   <FormControl>
-                    <Input  placeholder="e.g 300.000" {...field} type="number" />
+                    <Input placeholder="e.g 300.000" {...field} type="number" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
