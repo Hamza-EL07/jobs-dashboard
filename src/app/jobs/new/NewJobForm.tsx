@@ -21,8 +21,7 @@ import { Label } from "@/components/ui/label";
 import RichTextEditor from "@/components/RichTextEditor";
 import { draftToMarkdown } from "markdown-draft-js";
 import LoadingButton from "@/components/LoadingButton";
-import { object } from "zod";
-import { CreatJobPosting } from "./Action";
+import { CreatJobPosting } from "./actions";
 
 export default function NewJobForm() {
   const form = useForm<CreateJobValues>({
@@ -40,7 +39,7 @@ export default function NewJobForm() {
   } = form;
 
   async function onSubmit(values: CreateJobValues) {
-    // alert(JSON.stringify(values, null, 2)); delet this to add Action.tsx
+    // alert(JSON.stringify(values, null, 2)); delet this to add actions.tsx
     const formData = new FormData();
 
     Object.entries(values).forEach(([key, value]) => {
