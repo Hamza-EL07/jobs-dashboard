@@ -1,5 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { Metadata } from "next";
+import AdminNavbar from "./AdminNavbar";
 
 export async function generateMetadata(): Promise<Metadata> {
   const title = "Admin";
@@ -9,5 +10,10 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <ClerkProvider>{children}</ClerkProvider>;
+  return (
+    <ClerkProvider>
+      <AdminNavbar />
+      {children}
+    </ClerkProvider>
+  );
 }
