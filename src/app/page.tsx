@@ -10,6 +10,7 @@ interface PageProps {
     type?: string;
     location?: string;
     remote?: string;
+    page?: string;
   };
 }
 
@@ -22,26 +23,26 @@ function getTitle({ q, type, location, remote }: JobFilterValues) {
         ? "Remote developer jobs"
         : "All developer jobs";
 
-      const titleSuffix = location ? ` in ${location}` : "";
-      
-      return `${titlePrefix}${titleSuffix}`
+  const titleSuffix = location ? ` in ${location}` : "";
+
+  return `${titlePrefix}${titleSuffix}`;
 }
 
 export function generateMetadata({
-  searchParams: {q, type, location, remote}
+  searchParams: { q, type, location, remote },
 }: PageProps): Metadata {
   return {
-    title : `${getTitle({
+    title: `${getTitle({
       q,
       type,
       location,
-      remote : remote === "true",
-    })} | Next Job`
-  }
+      remote: remote === "true",
+    })} | Next Job`,
+  };
 }
 
 export default async function Home({
-  searchParams: { q, type, location, remote },
+  searchParams: { q, type, location, remote, page },
 }: PageProps) {
   const filterValues: JobFilterValues = {
     q,
@@ -57,7 +58,10 @@ export default async function Home({
       </div>
       <section className="flex flex-col gap-4 md:flex-row">
         <JobFilterSidebar defaultValues={filterValues} />
-        <JobResults filterValues={filterValues} />
+        <JobResults
+          filterValues={filterValues}
+          page={page ? parseInt(page) : undefined}
+        />
       </section>
     </main>
   );
