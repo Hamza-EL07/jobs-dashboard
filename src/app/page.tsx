@@ -1,3 +1,4 @@
+import Hero from "@/components/Hero";
 import JobFilterSidebar from "@/components/JobFilterSidebar";
 import JobResults from "@/components/JobResults";
 import H1 from "@/components/ui/h1";
@@ -52,7 +53,10 @@ export default async function Home({
   };
   return (
     <main className="m-auto my-10 max-w-5xl space-y-10 px-3">
-      <div className="space-y-5 text-center">
+      <section className="flex flex-col gap-4 md:flex-row">
+        <Hero />
+      </section>
+      <div id="jobs" className="space-y-5 text-center">
         <H1>{getTitle(filterValues)}</H1>
         <p className="text-muted-foreground">Find your dream job.</p>
       </div>
